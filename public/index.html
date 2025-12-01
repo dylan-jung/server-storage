@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Storage</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>File Storage</h1>
+            <p class="subtitle">Simple File Sharing</p>
+        </header>
+
+        <main class="card">
+            <div id="file-list" class="file-list">
+                <div class="empty-state">Loading files...</div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        async function loadFiles() {
+            const listContainer = document.getElementById('file-list');
+            try {
+                const response = await fetch('/files');
+                const files = await response.json();
+
+                if (files.length === 0) {
+                    listContainer.innerHTML = `
+                        <div class="empty-state">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 1rem; opacity: 0.5;">
+                                <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                                <polyline points="13 2 13 9 20 9"></polyline>
+                            </svg>
+                            <p>No files available</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                listContainer.innerHTML = files.map(file => `
+                    <div class="file-item">
+                        <a href="/file.html?file=${file}" class="file-name" target="_blank">
+                            <svg class="file-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                            ${file}
+                        </a>
+                        <a href="/data/${file}" download class="btn btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.9rem;">
+                            Download
+                        </a>
+                    </div>
+                `).join('');
+            } catch (err) {
+                console.error('Error loading files:', err);
+                listContainer.innerHTML = `
+                    <div class="empty-state" style="color: #ef4444;">
+                        Failed to load files. Please try again later.
+                    </div>
+                `;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadFiles);
+    </script>
+</body>
+</html>

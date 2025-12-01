@@ -1,0 +1,23 @@
+{
+  "name": "server-storage",
+  "version": "1.0.0",
+  "description": "파일시스템에 저장하고 public하게 접근할 수 있도록 하는 서버",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dylan-jung/server-storage.git"
+  },
+  "author": "dylan-jung",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dylan-jung/server-storage/issues"
+  },
+  "homepage": "https://github.com/dylan-jung/server-storage#readme",
+  "dependencies": {
+    "express": "^5.1.0",
+    "multer": "^2.0.2"
+  }
+}

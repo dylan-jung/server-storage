@@ -1,0 +1,14 @@
+services:
+  comment:
+    image: node:18
+    volumes:
+      - ./:/app
+      - ./public:/app/public
+    working_dir: /app
+    command: npm run start
+    restart: always
+    
+networks:
+  default:
+    external: true
+    name: nginx-proxy-network
