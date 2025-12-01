@@ -1,6 +1,6 @@
 services:
-  comment:
-    image: node:18
+  simple-file-storage:
+    image: node:22
     volumes:
       - ./:/app
       - ./public:/app/public
