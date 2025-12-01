@@ -152,7 +152,7 @@
 
                 if (res.ok) {
                     const data = await res.json();
-                    window.location.href = `/submitted.html?file=${encodeURIComponent(data.filename)}`;
+                    window.location.reload();
                 } else {
                     alert('Upload failed');
                 }
