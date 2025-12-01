@@ -36,15 +36,6 @@
             display: none;
         }
 
-        .section-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--text-color);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
     </style>
 </head>
 <body>
@@ -73,7 +64,7 @@
                     </svg>
                     <p style="margin-bottom: 0.5rem; font-weight: 500;">Click to upload or drag and drop</p>
                     <p style="font-size: 0.9rem; color: #94a3b8;">Any file type supported</p>
-                    <input type="file" id="file-input" class="file-input" name="file" required>
+                    <input type="file" id="file-input" class="file-input" name="file" accept="*/*" required>
                 </div>
                 <div id="selected-file" style="margin-bottom: 1rem; text-align: center; display: none;"></div>
                 <button type="submit" class="btn btn-primary" style="width: 100%;">Upload File</button>
