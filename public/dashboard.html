@@ -169,27 +169,57 @@
                 }
 
                 listContainer.innerHTML = files.map(file => `
-                    <div class="file-item">
-                        <a href="/data/${file}" class="file-name" target="_blank">
-                            <svg class="file-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                <polyline points="14 2 14 8 20 8"></polyline>
-                            </svg>
-                            ${file}
-                        </a>
-                        <button onclick="deleteFile('${file}')" class="btn btn-danger" style="padding: 0.4rem 0.8rem; font-size: 0.9rem;">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="3 6 5 6 21 6"></polyline>
-                                <path d="M19 6v14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                            </svg>
-                            Delete
-                        </button>
+                    <div class="file-item" style="display: flex; align-items: center; justify-content: space-between;">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <a href="/data/${file.name}" class="file-name" target="_blank">
+                                <svg class="file-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                </svg>
+                                ${file.name}
+                            </a>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem;">
+                                <input type="checkbox" 
+                                    ${file.isRendered ? 'checked' : ''} 
+                                    onchange="toggleRender('${file.name}', this.checked)">
+                                Show to List
+                            </label>
+                            <button onclick="deleteFile('${file.name}')" class="btn btn-danger" style="padding: 0.4rem 0.8rem; font-size: 0.9rem;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                </svg>
+                                Delete
+                            </button>
+                        </div>
                     </div>
                 `).join('');
             } catch (err) {
                 console.error('Error loading files:', err);
             }
         }
+
+        window.toggleRender = async (filename, isRendered) => {
+            try {
+                const res = await fetch(`/file/${filename}/render`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ isRendered })
+                });
+                
+                if (!res.ok) {
+                    throw new Error('Failed to update status');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Error updating render status');
+                loadFiles(); // Revert UI on error
+            }
+        };
 
         window.deleteFile = async (filename) => {
             if (!confirm(`Are you sure you want to delete ${filename}?`)) return;
